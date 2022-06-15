@@ -17,7 +17,7 @@ function escape(str) {
       }[match]
     })
   }
-exports.Database = class {
+class Database {
     constructor(connection_info){
         this.info = connection_info;
         this.handle = mariadb.createPool(connection_info);
@@ -92,4 +92,4 @@ exports.Database = class {
     }
 
 }
-
+exports.Database = Database;

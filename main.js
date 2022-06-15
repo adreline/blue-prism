@@ -17,10 +17,10 @@ function crawl(){
                 console.log(`pulling ${link.url}`)
                 pullWebsite(link.url).then((dom)=>{
                     let data = crunchDataFromHtml(dom);
-                    let bannable = blacklist.find(word=>{ return data.title[0].toLowerCase().includes(word) });
+                    let bannable = blacklist.find(word=>{ return data.title.toLowerCase().includes(word) });
                     bannable = (typeof bannable != 'undefined');
                     heap.push({
-                        title: (bannable) ? 'banned' : data.title[0],
+                        title: (bannable) ? 'banned' : data.title,
                         last_visit: Date.now(),
                         contents: (bannable) ? 'banned' : 'some contents',
                         url: link.url,
@@ -38,8 +38,14 @@ function crawl(){
                     }
                     callback();
                 }).catch((e)=>{
-                    console.log('couldnt pull');
-                    console.log(e);
+                    console.log(`couldnt pull ${link.url} \n ${e.message}`);
+                    heap.push({
+                        title: 'Dead Link',
+                        last_visit: Date.now(),
+                        contents: e.message,
+                        url: link.url,
+                        banned: 1
+                    })
                     callback();
                 })
             }else{
@@ -57,6 +63,9 @@ function crawl(){
                 console.log('commited');
                 heap = [];
                 q.resume();
+            })
+            .catch(e=>{
+                console.log(e);
             })
         }
     }, settings.maxProxyConnections);
@@ -88,8 +97,4 @@ switch(flags){
     break;
 }
 
-process.on('uncaughtException', err => {
-    console.error((new Date).toUTCString() + ' uncaughtException:', err.message)
-    console.error(err.stack)
-    process.exit(1)
-});
+

@@ -1,0 +1,16 @@
+table
+    tr(class="table-head")
+        th title
+        th description 
+        th last seen 
+        th actions
+        th url
+    each link in links
+        tr(class="table-row")
+            th= link.title
+            th= link.contents.slice(0,500)
+            th= link.last_visited
+            th
+                a(href=`/ban/${link.id}` class='button danger') ban 
+            th
+                a(href=link.url)= link.url

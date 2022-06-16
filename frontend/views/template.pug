@@ -1,0 +1,18 @@
+doctype html
+head
+  title Blue Prism
+  link(rel="stylesheet" type="text/css" href="/app.css")
+body
+      nav
+        h1 Blue Prism
+      div(class="columns")
+        div(class="column aside")
+          a(class="button" href="/") Home
+          span(class="separator")
+          form(action='/search' method='get')
+            input(type='text' name='question')
+            button(class="button" type="submit") search
+        div(class="column")
+          if code == 1
+              p= msg 
+          block main

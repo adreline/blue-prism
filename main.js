@@ -5,9 +5,9 @@ const { Database } = require(`./modules/database.js`);
 const { Frontend } = require(`./frontend/server.js`);
 
 const Deeplinks = new Database(db);
-const Server = new Frontend(Deeplinks,`${root}/frontend/views`);
+const Server = new Frontend(Deeplinks,root);
 
-const flags = (typeof process.argv.slice(2)[0] != 'undefined')?process.argv.slice(2)[0]:'default';
+const flags = (typeof process.argv.slice(2)[0] != 'undefined') ? process.argv.slice(2)[0] : 'default';
 let heap = [];
 
 function crawl(){
@@ -20,18 +20,18 @@ function crawl(){
                     let bannable = blacklist.find(word=>{ return data.title.toLowerCase().includes(word) });
                     bannable = (typeof bannable != 'undefined');
                     heap.push({
-                        title: (bannable) ? 'banned' : data.title,
+                        title: (bannable) ? '__banned' : data.title,
                         last_visit: Date.now(),
-                        contents: (bannable) ? 'banned' : 'some contents',
+                        contents: (bannable) ? '__banned' : 'some contents',
                         url: link.url,
                         banned: (bannable) ? 1 : 0
                     })
                     for(next_link of data.links){
                         if (q.length()<settings.maxQueueSize) q.push({url: next_link},()=>{console.log('pull finished')});
                         heap.push({
-                            title: '-',
+                            title: '__uncharted',
                             last_visit: 0,
-                            contents: '-',
+                            contents: '__uncharted',
                             url: next_link,
                             banned: 0
                         })
@@ -40,7 +40,7 @@ function crawl(){
                 }).catch((e)=>{
                     console.log(`couldnt pull ${link.url} \n ${e.message}`);
                     heap.push({
-                        title: 'Dead Link',
+                        title: '__dead',
                         last_visit: Date.now(),
                         contents: e.message,
                         url: link.url,

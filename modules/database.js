@@ -18,7 +18,7 @@ class Database {
     async getWebsites(limit=-1){
         let conn = await this.handle.getConnection();
         let promise = new Promise((results, reject)=>{
-            let query = `SELECT * FROM websites WHERE banned = 0 AND last_visited != 0`;
+            let query = `SELECT * FROM websites WHERE banned = 0 AND last_visited != 0 ORDER BY last_visited DESC`;
             query+=(limit!=-1) ? ` LIMIT ${limit}` : ``;
             conn.query(query)
             .then(rows=>{ conn.end(); results(rows); })
@@ -71,6 +71,15 @@ class Database {
 
 
             });            
+    }
+    async sql(q){
+        let conn = await this.handle.getConnection();
+        let promise = new Promise((results, reject)=>{
+            conn.query(q)
+            .then(rows=>{ conn.end(); results(rows); })
+            .catch(e=>{ conn.end(); reject(e);})
+        })
+        return await promise;
     }
 
 }

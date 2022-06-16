@@ -1,10 +1,28 @@
 doctype html
 head
-  title Deeplinks
+  title Blue Prism
+  link(rel="stylesheet" type="text/css" href="app.css")
 body
-    ul
-        each link in links
-            li= `${link.title} | ${link.url}`
+      nav
+        h1 Blue Prism
+      div(class="columns")
+        div(class="column aside")
+          a(class="button" href="/") Home
+        div(class="column")
+          table
+            tr(class="table-head")
+              th title
+              th content 
+              th last seen 
+              th url
+            each link in links
+              tr(class="table-row")
+                th= link.title
+                th= link.contents
+                th= link.last_visited
+                th
+                  a(href=link.url)= link.url
+              
 
 
     

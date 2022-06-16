@@ -33,21 +33,54 @@ nav h1{
     text-decoration: none;
     color: inherit;
     text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+a.button.info{
+    background-color: var(--accent);
+    border-radius: 25%;
+}
+.button.danger{
+    background-color: var(--danger);
+}
+.button.warning{
+    background-color: var(--warning);
+}
+.button.success{
+    background-color: var(--success);
 }
 .columns{
  display: flex;
  width: 100%;
  
 }
+.separator{
+    width: 100%;
+    border-bottom: 2px solid var(--muted);
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
 .column{
     width: auto;
     padding: 1rem;
 }
-.column.aside{
+.column.aside {
     background-color: var(--black);
-    width: fit-content;
-    min-width: 10%;
+    width: inherit;
+    min-width: 15%;
+    max-width: 15%;
 }
+input {
+    background: none;
+    border: 1px solid var(--accent);
+    color: var(--text);
+}
+form {
+    display: flex;
+}
+      
 table{
     text-align: left;
     border-collapse: collapse;

@@ -1,0 +1,7 @@
+div(class="pager")
+    each pager in pagination
+        span(class="page")
+            if(typeof pager.num == 'string')
+                a= '...'
+            else
+                a(href=pager.location)= pager.num+1

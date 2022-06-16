@@ -72,6 +72,15 @@ class Database {
 
             });            
     }
+    async selectWithPagination(step,sql,current=0){
+        let promise = new Promise((results, reject)=>{
+            const offset = current*step;
+            this.sql(`${sql} LIMIT ${offset},${step}`)
+            .then(rows=>{ results(rows) })
+            .catch(e=>{ reject(e) })
+        })
+        return await promise
+    }
     async sql(q){
         let conn = await this.handle.getConnection();
         let promise = new Promise((results, reject)=>{
@@ -81,6 +90,6 @@ class Database {
         })
         return await promise;
     }
-
+    
 }
 exports.Database = Database;

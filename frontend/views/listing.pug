@@ -14,3 +14,5 @@ table
                 a(href=`/ban/${link.id}` class='button danger') ban 
             th
                 a(href=link.url)= link.url
+if pagination != null
+    include pagination

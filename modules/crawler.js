@@ -17,7 +17,7 @@ function escape(str) {
         '\\': '\\\\'
       }[match]
     })
-  }
+}
 const patterns = {
     hyperlink: /((https?:)(\/\/)([\w]*)\.onion)/gmi,
     meta: {
@@ -56,7 +56,7 @@ function crunchDataFromHtml(dom){
     for(const paragraph of dom.matchAll(patterns.content.p)){
         paragraphs+=paragraph+"\n";
     }
-    const content = `Headers: ${headers} \n Paragraphs: ${paragraphs}`;
+    const content = `${headers} ${paragraphs}`;
     for(const link of dom.matchAll(patterns.hyperlink)){
         if(links.indexOf(link[0])==-1) links.push(link[0]);
     }

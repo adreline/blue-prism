@@ -47,16 +47,17 @@ class Frontend{
                     }
                     var size = await this.db.sql(`SELECT COUNT(id) AS size FROM websites WHERE (banned = 0 AND last_visited != 0) AND (title LIKE '%${q}%' OR contents LIKE '%${q}%')`);
                     size = Number(size[0].size);
-                    const last_page = parseInt(size / settings.rowsPerPage) + 1;
+                    const last_page = parseInt(size / settings.rowsPerPage);
                     
                     
                     const data = await this.db.selectWithPagination(settings.rowsPerPage,`SELECT * FROM websites WHERE (banned = 0 AND last_visited != 0) AND (title LIKE '%${q}%' OR contents LIKE '%${q}%')`,req.query.page);
-                    
-                    res.render('index',{ links: data, code: 0, pagination: { last_page: last_page, location: location, current_page: current_page  } });
+                    const pagination = this.paginate(`/search?question=${q}&page=`,current_page,last_page,4);
+
+                    res.render('index',{ links: data, code: 0, pagination: pagination });
                     
                 }catch(e){
                     console.error(e);
-                    res.render('index',{ links: [], code: 1, mgs: e.message, pagination: { last_page: null, location: null, current_page: null  } });
+                    res.render('index',{ links: [], code: 1, mgs: e.message, pagination: null });
                 }
                 
             })();    

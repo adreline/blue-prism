@@ -23,7 +23,10 @@ class Frontend{
                         if(req.query.page > last_page) throw new Error('page out of range');
                         current_page=req.query.page;
                     }
-                    const data = await this.db.selectWithPagination(settings.rowsPerPage,`SELECT * FROM websites WHERE banned = 0 AND last_visited != 0`,req.query.page);
+                    var data = await this.db.selectWithPagination(settings.rowsPerPage,`SELECT * FROM websites WHERE banned = 0 AND last_visited != 0`,req.query.page);
+                    data.forEach((link,key) => {
+                        data[key].last_visited = new Date(Number(link.last_visited)).toLocaleString();
+                    })
                     const pagination = this.paginate('/?page=',current_page,last_page,4);
                     res.render('index',{ links: data, code: 0, pagination: pagination })
                 }catch(e){
@@ -51,6 +54,9 @@ class Frontend{
                     
                     
                     const data = await this.db.selectWithPagination(settings.rowsPerPage,`SELECT * FROM websites WHERE (banned = 0 AND last_visited != 0) AND (title LIKE '%${q}%' OR contents LIKE '%${q}%')`,req.query.page);
+                    data.forEach((link,key) => {
+                        data[key].last_visited = new Date(Number(link.last_visited)).toLocaleString();
+                    })
                     const pagination = this.paginate(`/search?question=${q}&page=`,current_page,last_page,4);
 
                     res.render('index',{ links: data, code: 0, pagination: pagination });

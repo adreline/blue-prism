@@ -1,6 +1,7 @@
 const async = require('async');
 const { root, db, blacklist, settings } = require('./config.json')
-const { pullWebsite, crunchDataFromHtml, escape } = require(`./modules/crawler.js`);
+const { pullWebsite } = require(`./modules/crawler.js`);
+const { crunchDataFromHtml, escape } = require(`./modules/processor.js`);
 const { Database } = require(`./modules/database.js`);
 const { Frontend } = require(`./frontend/server.js`);
 

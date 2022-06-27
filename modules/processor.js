@@ -18,7 +18,7 @@ function escape(str) {
     })
 }
 const patterns = {
-    hyperlink: /((https?:)(\/\/)([\w]*)\.onion)/gmi,
+    hyperlink: /((https?:)(\/\/)([\w]*)\.onion(\/[\w\-\.?=&%\+\d]*)*)/gmi,
     meta: {
         title: /<title>.*<\/title>/gmi
     }

@@ -12,6 +12,7 @@ async function pullWebsite(link){
                 timeout: onion.connectionTimeout,
             })
         });
+        if(!response.ok) throw new Error('404 or 500');
         return await response.text();
     }catch(e){
         throw e;

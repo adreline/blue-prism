@@ -1,0 +1,7 @@
+extends template
+block main
+  h3 Purge a domain
+  p(class="muted") This will remove all records of that domain, together with all domains found on it. Sort of like delete cascade.
+  form(action='/purge' method='get')
+    input(type="text" name='domain')
+    button(class="button danger small float-right" type="submit") purge!

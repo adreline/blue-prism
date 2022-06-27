@@ -17,6 +17,9 @@ body{
     background-color: var(--bg);
     color: var(--text);
 }
+.muted{
+    color: var(--muted) !important;
+}
 nav{
     width: 100%;
     height: fit-content;
@@ -26,7 +29,6 @@ nav h1{
     padding: 1rem;
 }
 .button {
-    margin-left: 1rem;
     padding-top: .4rem;
     padding-bottom: .4rem;
     width: 100%;
@@ -55,6 +57,9 @@ a.button.info{
  width: 100%;
  
 }
+.button.small{
+    width: fit-content;
+}
 .separator{
     width: 100%;
     border-bottom: 2px solid var(--muted);
@@ -76,11 +81,21 @@ input {
     background: none;
     border: 1px solid var(--accent);
     color: var(--text);
+    width: 100%;
 }
-form {
+form *{
+    margin-top: 10px;
+}
+form.horizontal {
     display: flex;
 }
-      
+form.horizontal *{
+    margin-top: none;
+}
+form.horizontal button{
+    margin-left: 1rem;
+}
+  
 table{
     text-align: left;
     border-collapse: collapse;
@@ -121,4 +136,7 @@ table a{
     color: inherit;
     text-decoration: none;
     border-radius: 10%;
+}
+.float-right{
+    float: right;
 }

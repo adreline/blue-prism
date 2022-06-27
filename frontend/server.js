@@ -71,6 +71,38 @@ class Frontend{
         this.app.get("/app.css", (req, res)=>{
             res.sendFile(`${root}/frontend/views/${req.url}`)
         })
+        this.app.get("/control-panel",(req,res)=>{
+            res.render('control');
+        })
+        this.app.get("/purge",(req,res)=>{
+            const domain = escape(req.query.domain);
+            if(domain=='') throw new Error('domain is empty');
+            (async ()=>{
+                try{
+                    let q = `UPDATE deeplinks.websites SET title='__banned', contents='__banned', discovery_site='__banned', banned=1 WHERE url LIKE '%${domain}%' OR discovery_site LIKE '%${domain}%'`;
+                    await this.db.sql(q);
+                    
+                }catch(e){
+                    console.log(e.message);
+                }finally{
+                    res.redirect('/control-panel');
+                }
+            })();
+        })
+        this.app.get("/ban/:id",(req,res)=>{
+            const id = req.params.id;
+            if(isNaN(id)) throw new Error('id is invalid');
+            (async ()=>{
+                try{
+                    let q = `UPDATE deeplinks.websites SET title='__banned', contents='__banned', banned=1 WHERE id = ${id}`;
+                    await this.db.sql(q);
+                }catch(e){
+                    console.log(e.message);
+                }finally{
+                    res.redirect('/');
+                }
+            })();
+        })
     }
     serve(){
         this.app.listen(9997, () => {

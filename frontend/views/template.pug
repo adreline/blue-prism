@@ -9,7 +9,9 @@ body
         div(class="column aside")
           a(class="button" href="/") Home
           span(class="separator")
-          form(action='/search' method='get')
+          a(class="button" href="/control-panel") Control panel
+          span(class="separator")
+          form(class='horizontal' action='/search' method='get')
             input(type='text' name='question')
             button(class="button" type="submit") search
         div(class="column")

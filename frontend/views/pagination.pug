@@ -1,7 +1,10 @@
-div(class="pager")
+ul(class="pager")
     each pager in pagination
-        span(class="page")
+        li(class="page")
             if(typeof pager.num == 'string')
-                a= '...'
+                p= '...'
             else
-                a(href=pager.location)= pager.num+1
+                if(pager.current)
+                    a(href=pager.location class="is-active")= pager.num+1
+                else
+                    a(href=pager.location)= pager.num+1

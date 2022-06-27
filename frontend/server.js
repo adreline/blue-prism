@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const { escape } = require('../modules/crawler.js');
+const { escape } = require('../modules/processor.js');
 const { settings } = require('../config.json');
 
 class Frontend{
@@ -72,7 +72,7 @@ class Frontend{
         })
     }
     paginate(location,current,last_page,breakpoint){
-        if(last_page==1) return null;
+        if(last_page==1||last_page==0) return null;
         current=parseInt(current);
         let pagination = [];
         if(last_page > (breakpoint*2)){

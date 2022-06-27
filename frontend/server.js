@@ -85,7 +85,8 @@ class Frontend{
                 }catch(e){
                     console.log(e.message);
                 }finally{
-                    res.redirect('/control-panel');
+                    const backtrack = new URL(req.headers.referer);
+                    res.redirect(`${backtrack.pathname}${backtrack.search}`);
                 }
             })();
         })
@@ -99,7 +100,8 @@ class Frontend{
                 }catch(e){
                     console.log(e.message);
                 }finally{
-                    res.redirect('/');
+                    const backtrack = new URL(req.headers.referer);
+                    res.redirect(`${backtrack.pathname}${backtrack.search}`);
                 }
             })();
         })

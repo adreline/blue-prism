@@ -20,68 +20,71 @@ async function replenish(q){
     }) 
     return await promise;
 }
-
+function explore(){
+    let q = async.queue((link, callback)=>{
+        Deeplinks.wasVisited(link.url).then(visited=>{
+            if(!visited){
+                console.log(`pulling ${link.url}`)
+                pullWebsite(link.url).then((dom)=>{
+                    const data = crunchDataFromHtml(dom);
+                    let bannable = blacklist.find(word=>{ return data.title.toLowerCase().includes(word) });
+                    bannable = (typeof bannable != 'undefined');
+                    heap.push({
+                        title: (bannable) ? '__banned' : data.title,
+                        last_visit: Date.now(),
+                        contents: (bannable) ? '__banned' : data.content,
+                        url: link.url,
+                        discovery_site: link.discovered,
+                        banned: (bannable) ? 1 : 0
+                    })
+                    for(next_link of data.links){
+                        if (q.length()<settings.maxQueueSize) q.push({url: next_link, discovered: link.url},()=>{console.log('pull finished')});
+                        heap.push({
+                            title: '__uncharted',
+                            last_visit: 0,
+                            contents: '__uncharted',
+                            url: next_link,
+                            discovery_site: link.url,
+                            banned: 0
+                        })
+                    }
+                    callback();
+                }).catch((e)=>{
+                    console.log(e.message);
+                    heap.push({
+                        title: '__dead',
+                        last_visit: Date.now(),
+                        contents: escape(e.message.replace(link.url,'')),
+                        url: link.url,
+                        discovery_site: link.discovered,
+                        banned: 1
+                    })
+                    callback();
+                })
+            }else{
+                console.log(`not pulling, url visited`)
+                callback();
+            }
+        })
+        console.log(`links in queue: ${q.length()}`); 
+        console.log(`Heap size: ${heap.length}`);
+        if(heap.length>settings.maxHeapSize){
+            console.log('commiting heap to db');
+            q.pause();
+            Deeplinks.putWebsites(heap)
+            .then(()=>{
+                console.log('commited');
+                heap = [];
+                q.resume();
+            })
+            .catch(e=>{ console.log(e.message) })
+        }
+    }, settings.maxProxyConnections);
+    return q;
+}
 switch(flags){
     case 'default':
-        var q = async.queue((link, callback)=>{
-            Deeplinks.wasVisited(link.url).then(visited=>{
-                if(!visited){
-                    console.log(`pulling ${link.url}`)
-                    pullWebsite(link.url).then((dom)=>{
-                        const data = crunchDataFromHtml(dom);
-                        let bannable = blacklist.find(word=>{ return data.title.toLowerCase().includes(word) });
-                        bannable = (typeof bannable != 'undefined');
-                        heap.push({
-                            title: (bannable) ? '__banned' : data.title,
-                            last_visit: Date.now(),
-                            contents: (bannable) ? '__banned' : data.content,
-                            url: link.url,
-                            discovery_site: link.discovered,
-                            banned: (bannable) ? 1 : 0
-                        })
-                        for(next_link of data.links){
-                            if (q.length()<settings.maxQueueSize) q.push({url: next_link, discovered: link.url},()=>{console.log('pull finished')});
-                            heap.push({
-                                title: '__uncharted',
-                                last_visit: 0,
-                                contents: '__uncharted',
-                                url: next_link,
-                                discovery_site: link.url,
-                                banned: 0
-                            })
-                        }
-                        callback();
-                    }).catch((e)=>{
-                        console.log(e.message);
-                        heap.push({
-                            title: '__dead',
-                            last_visit: Date.now(),
-                            contents: escape(e.message.replace(link.url,'')),
-                            url: link.url,
-                            discovery_site: link.discovered,
-                            banned: 1
-                        })
-                        callback();
-                    })
-                }else{
-                    console.log(`not pulling, url visited`)
-                    callback();
-                }
-            })
-            console.log(`links in queue: ${q.length()}`); 
-            console.log(`Heap size: ${heap.length}`);
-            if(heap.length>settings.maxHeapSize){
-                console.log('commiting heap to db');
-                q.pause();
-                Deeplinks.putWebsites(heap)
-                .then(()=>{
-                    console.log('commited');
-                    heap = [];
-                    q.resume();
-                })
-                .catch(e=>{ console.log(e.message) })
-            }
-        }, settings.maxProxyConnections);
+        let q = explore();
         
         replenish(q)
         .catch(e=>{

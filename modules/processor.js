@@ -18,7 +18,8 @@ function escape(str) {
     })
 }
 const patterns = {
-    hyperlink: /((https?:)(\/\/)([\w]*)\.onion(\/[\w\-\.?=&%\+\d]*)*)/gmi,
+    hyperlink: /((https?:)(\/\/)([\w]*)\.onion(\/[\w\-?=&%\+\d]*|\.html?|\.php)*)/gmi,
+    disallowedlink: /(?:(?:https?)+\:\/\/+[a-zA-Z0-9\/\._-]{1,})+(?:(?:jpe?g|png|gif|tiff))/i,
     meta: {
         title: /<title>.*<\/title>/gmi
     }
@@ -40,7 +41,9 @@ function affirmNode(html_node){
     //tag isnt blacklisted
     return true
 }
-  
+function affirmLink(link){
+    return (link.match(patterns.disallowedlink) == null);
+}
 
 function gatherTextNodes(dom){
     //this is a recursive function which walks over html dom tree searching for _rawText.
@@ -82,13 +85,13 @@ function crunchDataFromHtml(res){
     if(typeof res != 'string') throw new Error(`Data submited to parser is not of the type string, but ${typeof res}`);
     let links=[];
     let title = res.match(patterns.meta.title);
-    title = (title.length==0) ? "no title found" : title[0];
+    title = (title==null||title.length==0) ? "no title found" : title[0];
     if(!valid(res)) throw new Error('html invalid');
     const dom = parse(res);
     const content = gatherTextNodes(dom);
 
     for(const link of res.matchAll(patterns.hyperlink)){
-        if(links.indexOf(link[0])==-1) links.push(link[0]);
+        if(links.indexOf(link[0])==-1 && affirmLink(link[0])) links.push(link[0]);
     }
     return {links: links, title: escape(sanitizeHtml(title,{allowedTags: []})), content: escape(sanitizeHtml(content,{allowedTags: []}))}
 }

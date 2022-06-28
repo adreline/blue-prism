@@ -1,0 +1,24 @@
+{
+    "db": {
+        "host": "localhost", 
+        "user": "db_user", 
+        "database": "db_name",
+        "password": "password",
+        "connectionLimit": 10
+   },
+   "onion": {
+        "host": "127.0.0.1",
+        "port": "9050",
+        "connectionTimeout": 30000
+   },
+   "settings": {
+        "maxHeapSize": 40,
+        "maxQueueSize": 40,
+        "maxProxyConnections": 15,
+        "rowsPerPage": 14
+   },
+    "root": "/home/ubuntu/blue-prism",
+    "blacklist": [
+        
+    ]
+}

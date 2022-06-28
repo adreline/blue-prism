@@ -68,7 +68,7 @@ class Frontend{
                 
             })();    
         })
-        this.app.get("/app.css", (req, res)=>{
+        this.app.get(/\/\w*(\.css|\.png|\.jpe?g)/, (req, res)=>{
             res.sendFile(`${root}/frontend/views/${req.url}`)
         })
         this.app.get("/control-panel",(req,res)=>{

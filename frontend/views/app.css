@@ -28,9 +28,15 @@ nav{
     width: 100%;
     height: fit-content;
     background-color: var(--black);
+    display: flex;
+    padding: 1rem;
+}
+nav .logo{
+    max-width: 50px;
+    height: auto;
 }
 nav h1{
-    padding: 1rem;
+    align-self: end;
 }
 .button {
     padding-top: .4rem;

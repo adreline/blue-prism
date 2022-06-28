@@ -42,7 +42,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `deeplinks`;
-INSERT INTO `deeplinks`.`websites` (`id`, `title`, `contents`, `last_visited`, `url`, `banned`, `discovery_site`) VALUES (DEFAULT, DEFAULT, DEFAULT, 0, 'http://jgwe5cjqdbyvudjqskaajbfibfewew4pndx52dye7ug3mt3jimmktkid.onion', DEFAULT, '__origin');
+INSERT INTO `deeplinks`.`websites` (`title`, `contents`, `last_visited`, `url`, `banned`, `discovery_site`) VALUES (DEFAULT, DEFAULT, 0, 'http://jgwe5cjqdbyvudjqskaajbfibfewew4pndx52dye7ug3mt3jimmktkid.onion', DEFAULT, '__origin');
 
 COMMIT;
 

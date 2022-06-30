@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { escape } = require('../modules/processor.js');
 const { settings } = require('../config.json');
+const { spawn } = require('child_process');
 
 class Frontend{
     constructor(db_handle,root){
@@ -73,6 +74,25 @@ class Frontend{
         })
         this.app.get("/control-panel",(req,res)=>{
             res.render('control');
+        })
+        this.app.get("/crawl/:case",(req,res)=>{
+            const crawler = spawn('node main.js');
+            crawler.stdout.on('data', (data) => {
+                console.log(`crawler stdout:\n${data}`);
+                crawler.stdout.pipe(res);
+            });
+            res.render('crawler');
+        })
+        this.app.get("/crawler",(req,res)=>{
+            const forever = spawn('forever',['list','plain']);
+            let ps = '';
+            forever.stdout.on('data', (data) => {
+                ps+=data;
+            });
+            forever.on('exit',()=>{
+                res.render('crawler',{ps: ps});
+            })
+           
         })
         this.app.get("/purge",(req,res)=>{
             const domain = escape(req.query.domain);

@@ -1,0 +1,13 @@
+extends template
+block main
+  h3 Freeroam crawl
+  p(class="muted") This will start crawling job, using uncharted websites in the database.
+  form(action='/crawl/0' method='get')
+    button(class="button success small" type="submit") begin
+  h3 Add domain
+  p(class="muted") This will add new domain to the index and mark it as uncharted for the crawler to pickup.
+  form(action='/crawl/1' method='get')
+    input(type="text" name='domain')
+    button(class="button success small" type="submit") add
+  h3 Crawler status
+    p= ps

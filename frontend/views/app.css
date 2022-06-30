@@ -17,6 +17,9 @@ a{
     color: inherit;
     text-decoration: none;
 }
+h3{
+    margin-top: 1rem;
+}
 body{
     background-color: var(--bg);
     color: var(--text);

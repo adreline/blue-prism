@@ -78,7 +78,16 @@ class Frontend{
                 const banned = await this.db.sql("SELECT COUNT(id) AS 'num' FROM websites WHERE banned=1 AND title!='__dead'");
                 const dead = await this.db.sql("SELECT COUNT(id) AS 'num' FROM websites WHERE title='__dead'");
                 const uncharted = await this.db.sql("SELECT COUNT(id) AS 'num' FROM websites WHERE last_visited=0;");
-                res.render('control',{total: Number(total[0].num), indexed: Number(indexed[0].num), banned: Number(banned[0].num), dead: Number(dead[0].num), uncharted: Number(uncharted[0].num)});    
+                var stats = {
+                    total: Number(total[0].num),
+                    indexed: Number(indexed[0].num),
+                    banned: Number(banned[0].num),
+                    dead: Number(dead[0].num),
+                    uncharted: Number(uncharted[0].num),
+                    ratio: null
+                }
+                stats.ratio = ((1-(stats.indexed/(stats.total - stats.uncharted)))*100).toPrecision(4);
+                res.render('control',stats);    
             })();
         })
         this.app.get("/purge",(req,res)=>{

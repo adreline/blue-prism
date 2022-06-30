@@ -15,7 +15,8 @@
         "maxHeapSize": 40,
         "maxQueueSize": 40,
         "maxProxyConnections": 15,
-        "rowsPerPage": 14
+        "rowsPerPage": 14,
+        "identity": "bp web crawler"
    },
     "root": "/home/ubuntu/blue-prism",
     "blacklist": [

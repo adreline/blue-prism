@@ -1,5 +1,13 @@
 extends template
 block main
+  h3 Index
+  p(class="muted") Database statistics
+    ul
+      li Total url's seen: #{total}
+      li Indexed: #{indexed}
+      li Banned due to content filters: #{banned}
+      li Dead links: #{dead}
+      li Uncharted url's: #{uncharted}
   h3 Purge a domain
   p(class="muted") This will remove all records of that domain, together with all domains found on it. Sort of like delete cascade.
   form(action='/purge' method='get')

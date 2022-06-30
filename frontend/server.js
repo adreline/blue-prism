@@ -72,7 +72,14 @@ class Frontend{
             res.sendFile(`${root}/frontend/views/${req.url}`)
         })
         this.app.get("/control-panel",(req,res)=>{
-            res.render('control');
+            (async ()=>{
+                const total = await this.db.sql("SELECT COUNT(id) AS 'num' FROM websites");
+                const indexed = await this.db.sql("SELECT COUNT(id) AS 'num' FROM websites WHERE banned=0 AND last_visited!=0");
+                const banned = await this.db.sql("SELECT COUNT(id) AS 'num' FROM websites WHERE banned=1 AND title!='__dead'");
+                const dead = await this.db.sql("SELECT COUNT(id) AS 'num' FROM websites WHERE title='__dead'");
+                const uncharted = await this.db.sql("SELECT COUNT(id) AS 'num' FROM websites WHERE last_visited=0;");
+                res.render('control',{total: Number(total[0].num), indexed: Number(indexed[0].num), banned: Number(banned[0].num), dead: Number(dead[0].num), uncharted: Number(uncharted[0].num)});    
+            })();
         })
         this.app.get("/purge",(req,res)=>{
             const domain = escape(req.query.domain);

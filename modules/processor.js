@@ -91,7 +91,7 @@ function crunchDataFromHtml(res){
     const content = gatherTextNodes(dom);
 
     for(const link of res.matchAll(patterns.hyperlink)){
-        if(links.indexOf(link[0])==-1 && affirmLink(link[0])) links.push(link[0]);
+        if(links.indexOf(link[0])==-1 && affirmLink(link[0])) links.push(new URL(link[0]));
     }
     return {links: links, title: escape(sanitizeHtml(title,{allowedTags: []})), content: escape(sanitizeHtml(content,{allowedTags: []}))}
 }

@@ -147,21 +147,11 @@ class Frontend{
         if(last_page > (breakpoint*2)){
             if(current > breakpoint){
                 for(var i = (current-breakpoint);i<(current+breakpoint+1);i++){
-                    if(i == current && current!=last_page){
-                        pagination.push({
-                            num: '...'
-                        });
-                    }
                     if(i<last_page+1){
                         pagination.push({
                             num: i,
                             location: `${location}${i}`,
                             current: (i == current)
-                        });
-                    }
-                    if(i == current && current!=last_page){
-                        pagination.push({
-                            num: '...'
                         });
                     }
                 }

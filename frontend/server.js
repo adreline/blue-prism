@@ -27,7 +27,7 @@ class Frontend{
                     data.forEach((link,key) => {
                         data[key].last_visited = new Date(Number(link.last_visited)).toLocaleString();
                     })
-                    const pagination = this.paginate('/?page=',current_page,last_page,4);
+                    const pagination = this.paginate('/?page=',current_page,last_page,2);
                     res.render('index',{ links: data, code: 0, pagination: pagination })
                 }catch(e){
                     console.error(e);
@@ -131,38 +131,52 @@ class Frontend{
         if(last_page==1||last_page==0) return null;
         current=parseInt(current);
         let pagination = [];
+        pagination.push({
+            num: '<<',
+            location: `${location}0`,
+            current: false
+        });
+        if(current-1>-1){
+            pagination.push({
+                num: '<',
+                location: `${location}${current-1}`,
+                current: false
+            });
+        }
+        
         if(last_page > (breakpoint*2)){
-            let j = current;
-            if(current < last_page-breakpoint){
-                for(var i = 0;i<breakpoint;i++){
-                    pagination.push({
-                        num: j,
-                        location: `${location}${j}`,
-                        current: (j == current)
-                    });
-                    j++;
+            if(current > breakpoint){
+                for(var i = (current-breakpoint);i<(current+breakpoint+1);i++){
+                    if(i == current && current!=last_page){
+                        pagination.push({
+                            num: '...'
+                        });
+                    }
+                    if(i<last_page+1){
+                        pagination.push({
+                            num: i,
+                            location: `${location}${i}`,
+                            current: (i == current)
+                        });
+                    }
+                    if(i == current && current!=last_page){
+                        pagination.push({
+                            num: '...'
+                        });
+                    }
                 }
             }else{
-                pagination.push({
-                    num: 0,
-                    location: `${location}${0}`,
-                    current: false
-                });
+                for(var i = 0;i<(breakpoint*2);i++){
+                    pagination.push({
+                        num: i,
+                        location: `${location}${i}`,
+                        current: (i == current)
+                    });
+                }
             }
-            pagination.push({
-                num: '...'
-            });
-            j=last_page-breakpoint;
-            for(var i = 0;i<breakpoint;i++){
-                pagination.push({
-                    num: j,
-                    location: `${location}${j}`,
-                    current: false 
-                });
-                j++;
-            }
+
         }else{
-            for(var i = 0;i<(breakpoint*2);i++){
+            for(var i = 0;i<last_page+1;i++){
                 pagination.push({
                     num: i,
                     location: `${location}${i}`,
@@ -170,6 +184,19 @@ class Frontend{
                 });
             }
         }
+        if(current<last_page){
+            pagination.push({
+                num: '>',
+                location: `${location}${current+1}`,
+                current: false
+            });
+        }
+        pagination.push({
+            num: '>>',
+            location: `${location}${last_page}`,
+            current: false
+        });
+
         return pagination;
 
     }

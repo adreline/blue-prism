@@ -2,9 +2,12 @@ ul(class="pager")
     each pager in pagination
         li(class="page")
             if(typeof pager.num == 'string')
-                p= '...'
+                if(pager.num == '...')
+                    p= '...'
+                else
+                    a(href=pager.location)= pager.num
             else
                 if(pager.current)
-                    a(href=pager.location class="is-active")= pager.num+1
+                    a(href=pager.location class="is-active")= pager.num
                 else
-                    a(href=pager.location)= pager.num+1
+                    a(href=pager.location)= pager.num

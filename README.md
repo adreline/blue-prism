@@ -28,13 +28,13 @@ Edit `config.example` according to your specifications and rename it to `config.
 To start a user interface web server (default port 9997):
 
 ```bash
-node main.js serve
+npm run serve
 ```
 
 To start a crawling job (if you migrated using the .sql then there is a starting point added already):
 
 ```
-node main.js
+npm run crawl
 ```
 
 ### Configuration file explained ###
